@@ -18,7 +18,6 @@ class WebDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
         webView.loadRequest(URLRequest(url: URL(string: url!)!))
     }
 

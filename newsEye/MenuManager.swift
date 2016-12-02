@@ -25,13 +25,14 @@ class MenuManager: NSObject, UITableViewDelegate, UITableViewDataSource {
             
             blackShadeView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.disMissMenu)))
             
-            let heightOfTheTableView:CGFloat = 264
+            let heightOfTheTableView:CGFloat = 300
             let y = window.frame.height - heightOfTheTableView
             menuTableView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: heightOfTheTableView)
             
             window.addSubview(blackShadeView)
             window.addSubview(menuTableView)
-            // Animate to Show the slide menu
+            
+            // Animate to Show the menu
             UIView.animate(withDuration: 0.5, animations: {
                 self.blackShadeView.alpha = 1
                 self.menuTableView.frame.origin.y = y
@@ -58,6 +59,7 @@ class MenuManager: NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrayOfSources.count
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell", for: indexPath) as UITableViewCell
         cell.textLabel?.text = arrayOfSources[indexPath.item]
@@ -65,9 +67,9 @@ class MenuManager: NSObject, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
+        return 50
     }
-    
+    // pass source value to mainVC(ViewController)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let vc = mainVC {
             vc.source = arrayOfSources[indexPath.item].lowercased()

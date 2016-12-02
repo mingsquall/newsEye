@@ -13,7 +13,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var tableView: UITableView!
     
     var articles:[Article]? = []
-    var source = "cnn"
+    
+    var source = "engadget"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,22 +51,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         // 设置article对象
                         let article = Article()
                         if let title = articleArrayFromJson["title"] as? String,
-                           let author = articleArrayFromJson["author"] as? String,
+//                           let author = articleArrayFromJson["author"] as? String,
                            let desc = articleArrayFromJson["description"] as? String,
                            let url = articleArrayFromJson["url"] as? String,
                            let urlToImage = articleArrayFromJson["urlToImage"] as? String {
-                                article.author = author
+//                                article.author = author
                                 article.desc = desc
                                 article.title = title
                                 article.url = url
                                 article.imageUrl = urlToImage
                         } else {
-                            article.author = "Null"
+//                            article.author = "Null"
                             article.desc = "Null"
                             article.title = "Null"
                             article.url = "Null"
                             article.imageUrl = "Null"
                         }
+                        if let author = articleArrayFromJson["author"] as? String {
+                            article.author = author
+                        } else {
+                            article.author = "Unknown"
+                        }
+                        
                         
                         self.articles?.append(article)
                     }
@@ -74,8 +81,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-
-                    
                 }
             } catch let error{
                 print(error)
@@ -91,7 +96,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: 设置Cell
+    // MARK: 设置Cell 重用
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as! ArticleCell
         cell.title.text = self.articles?[indexPath.item].title
@@ -101,6 +107,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         return cell
     }
+
+    
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -113,13 +121,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return self.articles?.count ?? 0
     }
     
-    // 得到被选中的某一行的 URL 然后 传递到 webDetailVC
+    
+    // Get the url of the Array and pass to webDetailVC
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let webVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "web") as! WebDetailViewController
         webVC.url = self.articles?[indexPath.item].url
         self.present(webVC, animated: true, completion: nil)
-        
     }
+    
+    
     
     // MARK: 点击Menu
     let menuManager = MenuManager()
@@ -133,6 +143,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 }
 
 // Set the Image Based on the URl
+
 extension UIImageView {
     func downLoadImage(from url: String) {
         let urlRequest = URLRequest(url: URL(string: url)!)
@@ -141,15 +152,20 @@ extension UIImageView {
                 print(error!)
                 return
             }
-            
             DispatchQueue.main.async {
                 self.image = UIImage(data: data!)
             }
-        
         }
         task.resume()
     }
 }
+
+
+
+
+
+
+
 
 
 
