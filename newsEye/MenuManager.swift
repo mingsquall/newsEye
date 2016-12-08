@@ -13,7 +13,6 @@ class MenuManager: NSObject, UITableViewDelegate, UITableViewDataSource {
     let blackShadeView = UIView()
     let menuTableView = UITableView()
     let arrayOfSources = ["TIME", "CNN", "Engadget", "National-geographic","The-economist","Google-news"]
-    
     var mainVC: ViewController?
     
     
@@ -69,6 +68,7 @@ class MenuManager: NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
+    
     // pass source value to mainVC(ViewController)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let vc = mainVC {
@@ -76,7 +76,6 @@ class MenuManager: NSObject, UITableViewDelegate, UITableViewDataSource {
             vc.fetchArticles(fromSource: arrayOfSources[indexPath.item].lowercased())
             disMissMenu()
         }
-        
     }
     
     override init() {

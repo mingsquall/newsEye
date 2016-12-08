@@ -19,15 +19,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
         fetchArticles(fromSource: source)
-        
     }
 
     func fetchArticles(fromSource provider: String) {
-        // 1 Create a URL Request and unwrap
+        // Create a URL Request and unwrap
         let urlRequest = URLRequest(url: URL(string: "https://newsapi.org/v1/articles?source=\(provider)&sortBy=top&apiKey=8fefc4d3bfbf4e2bb651379d98422d86")!)
-        // 2 Create a tasks URLSession& download things from the http - data is the JSON ,
+        // Create a tasks URLSession& download things from the http - data is the JSON ,
         let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             // check error
             if error != nil {
@@ -42,13 +40,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             do{
                 let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String : AnyObject]
                 
-                // 如果可能的话 把json中的articles数组取出来 as Dictionary of Array
+                // if possible Dray json中的articles  as Dictionary of Array
                 if let articlesArrayFromJson = json["articles"] as? [[String : AnyObject]] {
-                    // for every article in All
-                    
-                    // MARK: For in Loop to get the JSON Data
+                    // For every article 
+                    // MARK: For in Loop - Get the JSON Data
                     for articleArrayFromJson in articlesArrayFromJson {
-                        // 设置article对象
+                        // set article object
                         let article = Article()
                         if let title = articleArrayFromJson["title"] as? String,
 //                           let author = articleArrayFromJson["author"] as? String,
@@ -73,7 +70,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             article.author = "Unknown"
                         }
                         
-                        
                         self.articles?.append(article)
                     }
                     // 放在主线程中 这样可以立马看到 否则在background中会很慢
@@ -86,7 +82,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 print(error)
             }
         }
-        // 启动URLSession
+        // 启动 URLSession
         task.resume()
     }
     
@@ -143,7 +139,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 }
 
 // Set the Image Based on the URl
-
 extension UIImageView {
     func downLoadImage(from url: String) {
         let urlRequest = URLRequest(url: URL(string: url)!)
